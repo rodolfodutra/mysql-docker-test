@@ -2,7 +2,7 @@
 -- db: test
 -- PORT: 3306
 
--- @block
+-- @block Create Users table
 CREATE TABLE Users(
     id INT PRIMARY KEY AUTO_INCREMENT, 
     email VARCHAR(255) NOT NULL UNIQUE, 
@@ -10,26 +10,23 @@ CREATE TABLE Users(
     country VARCHAR(2)
 );
 
--- @block 
+-- @block Populate Users table
 INSERT INTO Users (email, bio, country)
 VALUES
     ('ola@mundo.pt', 'foo', 'PT'),
     ('hello@world.com', 'bar', 'UK'),
     ('hallo@welt.de', 'baz', 'DE');
 
--- @block 
+-- @block Show up to 4 portuguese users
 SELECT * FROM Users
 
 WHERE country = "PT"
-OR email LIKE '%de'
+OR email LIKE '%pt'
 
 ORDER BY id ASC
 LIMIT 4;
 
--- @block
-CREATE INDEX email_index ON Users(email);
-
--- @block
+-- @block Create Rooms table
 CREATE TABLE Rooms(
     id INT AUTO_INCREMENT, 
     street VARCHAR(255),
@@ -38,7 +35,7 @@ CREATE TABLE Rooms(
     FOREIGN KEY (owner_id) REFERENCES Users(id)
 );
 
--- @block 
+-- @block Populate Rooms table
 INSERT INTO Rooms (owner_id, street)
 VALUES
     (1, 'alameda d.afonso'), 
@@ -46,16 +43,16 @@ VALUES
     (1, 'mouraria'),
     (1, 'campo de ourique');
 
--- @block 
+-- @block Show all users that own rooms
 SELECT 
     Users.id AS user_id,
     Rooms.id AS room_id,
     email,
     street
 FROM Users
-RIGHT JOIN Rooms ON Rooms.owner_id = Users.id;
+INNER JOIN Rooms ON Rooms.owner_id = Users.id;
 
--- @block
+-- @block Create Bookings table
 CREATE TABLE Bookings(
     id INT AUTO_INCREMENT, 
     guest_id INT NOT NULL,
@@ -65,14 +62,14 @@ CREATE TABLE Bookings(
     FOREIGN KEY (room_id) REFERENCES Rooms(id)
 );
 
--- @block 
+-- @block Populate Bookings table
 INSERT INTO Bookings (guest_id, room_id)
 VALUES
     (2, 1), 
     (2, 2), 
     (3, 1)
 
--- @block 
+-- @block Delete Bookings table
 DROP TABLE Bookings;
 
 -- @block Rooms a user has booked
